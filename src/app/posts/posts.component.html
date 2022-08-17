@@ -1,0 +1,74 @@
+<div class="container">
+    <h1 class="d-flex justify-content-center">|||</h1>
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Create Post</button>
+        <input type="text" class="form-control search-field" placeholder="Search Here" [(ngModel)]="searchText" (ngModelChange)="search()"></div>
+    <br>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">userId</th>
+                <th scope="col">id</th>
+                <th scope="col">title</th>
+                <th scope="col">body</th>
+                <th width="220px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let post of posts | slice: (page - 1) * 5 : page  * 5 
+            " >
+                <th scope="row"> {{ post.userId }}</th>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.body }}</td>
+                <td>
+                    <div class="gapbtn">
+                        <button type="button" (click)="deletePost(post.id)" class="btn btn-danger">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <ngb-pagination
+ class="d-flex justify-content-center"
+ [collectionSize]="posts.length"
+ [pageSize]="5"
+ [(page)]="page"
+></ngb-pagination>
+    <!-- Modal -->
+    <ng-template #content let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create Post</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="form">
+                <div class="mb-3">
+                    <label for="dateOfBirth">id</label>
+                    <div class="input-group">
+                        <input id="validationTooltipUsername" formControlName="id" class="form-control" placeholder="id" name="pas"><br><br>
+                        <div class="minlengthError" *ngIf="f['id'].errors?.['minlength']">
+                            5 characters minimum
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="dateOfBirth">Title</label>
+                    <div class="input-group">
+                        <input id="dateOfBirth" formControlName="title" class="form-control" placeholder="title" name="dp">
+
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="dateOfBirth">body</label>
+                    <div class="input-group">
+                        <input id="dateOfBirth" formControlName="body" class="form-control" placeholder="body" name="dp">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" [class.btn-disabled]="!form.valid" [class.btn-input]='form.valid' [disabled]="!form.valid" (click)="submit()" (click)="modal.dismiss('Cross click')">Save</button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
